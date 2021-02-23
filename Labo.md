@@ -26,7 +26,7 @@ Name | Network | Description
 ---- | ------- | -----------
 vmnet2 | 10.10.1.0/24 | External LAN
 vmnet3 | 20.10.1.0/22 | k8s POD Network
-vmnet4 | 30.10.1.0/24 | k8s Service Network
+vmnet4 | 30.10.1.0/24 | k8s Service Network (private network)
 Host | 10.10.1.15/32 | k8s API server (external IP haproxy)
 Host | 30.10.1.1 | k8s API server (internal IP)
 Host | 30.10.1.10 | k8s DNS
