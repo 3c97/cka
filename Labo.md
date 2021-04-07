@@ -34,6 +34,10 @@ Host | 30.10.1.10 | k8s DNS
 ## User and password
 ckadmin/cklab01
 
+## Scripts for start and stop all VMs at once
+start-lab.sh
+stop-lab.sh
+
 ## Common location of all VMs
 /mnt/vm-location/VirtualMachines/
 

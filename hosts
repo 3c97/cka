@@ -1,0 +1,19 @@
+[controllers]
+10.10.1.31 #k8s-controller1
+10.10.1.32 #k8s-controller2
+10.10.1.33 #k8s-controller3
+
+[controllers:vars]
+ansible_user=ckadmin
+ansible_password=cklab01
+ansible_become=true
+
+[workers]
+10.10.1.61 #k8s-worker1 |  | Worker node
+10.10.1.62 #k8s-worker2 |  | Worker node
+10.10.1.63 #k8s-worker3 |  | Worker node
+
+[workers:vars]
+ansible_user=ckadmin
+ansible_password=cklab01
+ansible_become=true
