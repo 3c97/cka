@@ -51,6 +51,9 @@ sudo apt-get update
 sudo apt-get install -y kubectl
 ```
 
+## Install docker
+
+
 ## Generating certificates Certificate Authority
 ```
 ckadmin@cka-networker:~/certs$ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
