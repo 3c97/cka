@@ -1,15 +1,113 @@
-- name: host file update - Local DNS setup across all servers
-  hosts: all
+- hosts: all
   gather_facts: yes
   tasks:
-    - name: Update teh /etc/hosts file with nodename
-      tags: etchostupdate
-      become: yes
-      lineinfile:
-        path: "/etc/hosts"
-        regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
-        line: "{{ hostvars[item]['inventory_hostname'] }}\t{{ hostvars[item]['ansible_hostname']}}"
-        state: present
-        backup: yes
-      register: etchostupdate
-      loop: "{{groups['all']}}"
+  - name: Install docker needed packages
+    become: yes
+    yum:
+      name: "{{ packages }}"
+      state: present
+    vars:
+        packages:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - gnupg-agent
+        - software-properties-common
+
+  - name: add docker official apt-key
+    become: yes
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: add repository
+    become: yes
+    apt_repository:
+      repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+      state: present
+
+  - name: Install required docker-ce packages
+    become: yes
+    yum:
+      name: "{{ packages }}"
+      state: present
+    vars:
+        packages:
+        - docker-ce=5:19.03.12~3-0~ubuntu-focal
+        - docker-ce-cli=5:19.03.12~3-0~ubuntu-focal
+        - containerd.io
+        - python3-docker
+
+  - name: Prepare to load daemon.json for docker
+    become: yes
+    copy:
+      src: k8sfiles/docker_daemon.json
+      dest: /etc/docker/daemon.json
+      owner: root
+      group: root
+
+  - name: Restart docker daemon
+    become: yes
+    systemd:
+      state: restarted
+      daemon_reload: yes
+      name: docker
+
+  - name: Prepare to load br_netfilter
+    become: yes
+    copy:
+      src: k8sfiles/modules_load_k8s.conf
+      dest: /etc/modules-load.d/k8s.conf
+      owner: root
+      group: root
+
+  - name: Prepare to load sysctl
+    become: yes
+    copy:
+      src: k8sfiles/sysctl_k8s.conf
+      dest: /etc/sysctl.d/k8s.conf
+      owner: root
+      group: root
+
+  - name: Reload sysctl
+    become: yes
+    shell: "sysctl --system"
+
+
+  - name: Add kubeadm public keys
+    become: yes
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+
+  # - name: Prepare to load sources
+  #   become: yes
+  #   copy:
+  #     src: k8sfiles/sources_k8s.list
+  #     dest: /etc/apt/sources.list.d/k8s.list
+  #     owner: root
+  #     group: root
+
+  - name: Install required kubeadm packages
+    become: yes
+    yum:
+      name: "{{ packages }}"
+      state: present
+    vars:
+        packages:
+        - kubelet
+        - kubeadm
+        - kubectl
+
+  - name: Mark hold kubernetes
+    become: yes
+    shell: "apt-mark hold kubelet kubeadm kubectl"
+
+  - name: Disable SWAP since kubernetes can't work with swap enabled (1/2)
+    become: yes
+    shell: "swapoff -a"
+
+  - name: Disable SWAP in fstab since kubernetes can't work with swap enabled (2/2)
+    replace:
+      path: /etc/fstab
+      regexp: '^([^#].*?\sswap\s+sw\s+.*)$'
+      replace: '# \1'

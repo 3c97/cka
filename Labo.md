@@ -51,7 +51,11 @@ sudo apt-get update
 sudo apt-get install -y kubectl
 ```
 
-## Install docker
+## kubeadm Init
+
+```
+sudo kubeadm init --control-plane-endpoint=cka-controller1 --pod-network-cidr 172.16.0.0/16
+```
 
 
 ## Generating certificates Certificate Authority
@@ -89,7 +93,7 @@ network:
       addresses: [10.10.1.31/24]
       gateway4: 10.10.1.2
       nameservers:
-               addresses: [10.10.1.250]
+               addresses: [8.8.8.8]
     ens37:
       dhcp4: no
       addresses: [20.10.1.31/24]

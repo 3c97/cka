@@ -1,0 +1,15 @@
+- name: Host file update - Local DNS setup across all servers
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Update the /etc/hosts file with nodename
+      tags: etchostupdate
+      become: yes
+      lineinfile:
+        path: "/etc/hosts"
+        regexp: ".*\t{{ hostvars[item]['ansible_hostname']}}\t{{ hostvars[item]['ansible_hostname']}}"
+        line: "{{ hostvars[item]['inventory_hostname'] }}\t{{ hostvars[item]['ansible_hostname']}}"
+        state: present
+        backup: yes
+      register: etchostupdate
+      loop: "{{groups['all']}}"

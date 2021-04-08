@@ -1,7 +1,7 @@
 [controllers]
-10.10.1.31 ansible_hostname=k8s-controller1
-10.10.1.32 ansible_hostname=k8s-controller2
-10.10.1.33 ansible_hostname=k8s-controller3
+10.10.1.31 ansible_hostname=cka-controller1
+10.10.1.32 ansible_hostname=cka-controller2
+10.10.1.33 ansible_hostname=cka-controller3
 
 [controllers:vars]
 ansible_user=ckadmin
@@ -9,9 +9,9 @@ ansible_password=cklab01
 ansible_become=true
 
 [workers]
-10.10.1.61 ansible_hostname=k8s-worker1
-10.10.1.62 ansible_hostname=k8s-worker2
-10.10.1.63 ansible_hostname=k8s-worker3 
+10.10.1.61 ansible_hostname=cka-worker1
+10.10.1.62 ansible_hostname=cka-worker2
+10.10.1.63 ansible_hostname=cka-worker3 
 
 [workers:vars]
 ansible_user=ckadmin

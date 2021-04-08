@@ -1,0 +1,5 @@
+KUBECONFIG="/home/julio/Documents/kubernetes/cka/k8s_admin_vmwarelab.conf"
+export KUBECONFIG
+
+export PS1="(KUBELAB) $PS1"
+
