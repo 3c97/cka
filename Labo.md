@@ -54,7 +54,7 @@ sudo apt-get install -y kubectl
 ## kubeadm Init
 
 ```
-sudo kubeadm init --control-plane-endpoint=cka-controller1 --pod-network-cidr 172.16.0.0/16
+sudo kubeadm init --control-plane-endpoint=k8s-controller1 --pod-network-cidr 172.16.0.0/16
 ```
 
 
@@ -103,3 +103,12 @@ network:
       addresses: [30.10.1.31/24]
   version: 2
 ```
+
+## Add dahsboard to monitor k8s
+
+https://github.com/kubernetes/dashboard#kubernetes-dashboard
+https://github.com/kubernetes/dashboard/blob/master/docs/user/access-control/creating-sample-user.md
+
+Command to get the token to login
+`kubectl -n kubernetes-dashboard get secret $(kubectl -n kubernetes-dashboard get sa/admin-user -o jsonpath="{.secrets[0].name}") -o go-template="{{.data.token | base64decode}}"
+`

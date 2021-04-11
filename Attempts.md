@@ -274,3 +274,35 @@ kube-system   kube-proxy-drkl8                          1/1     Running   0     
 kube-system   kube-scheduler-cka-controller1            1/1     Running   1          29m    10.10.1.31   cka-controller1   <none>           <none>
 kube-system   kube-scheduler-cka-controller2            1/1     Running   0          109s   10.10.1.32   cka-controller2   <none>           <none>
 ```
+
+## Attempt with ubuntu 18.04
+```
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+You can now join any number of control-plane nodes by copying certificate authorities
+and service account keys on each node and then running the following as root:
+
+  kubeadm join k8s-controller1:6443 --token ejam81.dp1uc7ywrkpfwa3y \
+	--discovery-token-ca-cert-hash sha256:dd0bec0089defc834cd379185faa67d66183219585fd2bb189bcb040f92a8302 \
+	--control-plane
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join k8s-controller1:6443 --token ejam81.dp1uc7ywrkpfwa3y \
+	--discovery-token-ca-cert-hash sha256:dd0bec0089defc834cd379185faa67d66183219585fd2bb189bcb040f92a8302
+
+```

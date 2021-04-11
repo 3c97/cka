@@ -79,19 +79,20 @@
     apt_key:
       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
 
-  # - name: Prepare to load sources
-  #   become: yes
-  #   copy:
-  #     src: k8sfiles/sources_k8s.list
-  #     dest: /etc/apt/sources.list.d/k8s.list
-  #     owner: root
-  #     group: root
+  - name: Prepare to load sources
+    become: yes
+    copy:
+      src: k8sfiles/sources_k8s.list
+      dest: /etc/apt/sources.list.d/k8s.list
+      owner: root
+      group: root
 
   - name: Install required kubeadm packages
     become: yes
     yum:
       name: "{{ packages }}"
       state: present
+      update_cache: yes
     vars:
         packages:
         - kubelet
